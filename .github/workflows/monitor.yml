@@ -2,10 +2,7 @@ name: Beget KZ Monitor
 
 on:
   schedule:
-    - cron: '0 4 * * *'    # 07:00 MSK
-    - cron: '30 9 * * *'   # 12:30 MSK
-    - cron: '0 14 * * *'   # 17:00 MSK
-    - cron: '0 18 * * *'   # 21:00 MSK
+    - cron: '17 */1 * * *'  # Every hour at :17
   workflow_dispatch:  # Manual trigger from Actions tab
 
 jobs:

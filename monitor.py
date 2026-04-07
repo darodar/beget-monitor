@@ -119,22 +119,12 @@ def main():
 
     data = fetch_payload(html_resp.text)
     if data is None:
-        send_telegram(
-            "\u26a0\ufe0f <b>Beget Monitor</b>\n\n"
-            "\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c payload.\n"
-            "\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u0441\u0430\u0439\u0442\u0430 \u043c\u043e\u0433\u043b\u0430 \u0438\u0437\u043c\u0435\u043d\u0438\u0442\u044c\u0441\u044f.\n"
-            f"\u041f\u0440\u043e\u0432\u0435\u0440\u044c \u0432\u0440\u0443\u0447\u043d\u0443\u044e: {BEGET_URL}"
-        )
+        print("ERROR: payload not loaded")
         sys.exit(1)
 
     available = check_kz1(data)
     if available is None:
-        send_telegram(
-            "\u26a0\ufe0f <b>Beget Monitor</b>\n\n"
-            "kz1 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d \u0432 payload.\n"
-            "\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u043c\u043e\u0433\u043b\u0430 \u0438\u0437\u043c\u0435\u043d\u0438\u0442\u044c\u0441\u044f.\n"
-            f"\u041f\u0440\u043e\u0432\u0435\u0440\u044c \u0432\u0440\u0443\u0447\u043d\u0443\u044e: {BEGET_URL}"
-        )
+        print("ERROR: kz1 not found in payload")
         sys.exit(1)
 
     print(f"kz1 available = {available}")
