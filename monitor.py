@@ -60,14 +60,14 @@ def fetch_payload_url(html: str) -> str | None:
     return matches[0] if matches else None
 
 
-def fetch_payload(html: str) -> list | None:
+def fetch_payload(session: requests.Session, html: str) -> list | None:
     """Fetch the Nuxt _payload.json referenced in the HTML page."""
     url = fetch_payload_url(html)
     if not url:
         print("ERROR: _payload.json URL not found in HTML")
         return None
     print(f"Payload URL: {url}")
-    resp = requests.get(url, timeout=30, headers=HEADERS)
+    resp = session.get(url, timeout=30, headers=HEADERS)
     resp.raise_for_status()
     data = resp.json()
     if isinstance(data, list):
@@ -110,14 +110,18 @@ def main():
     time.sleep(delay)
 
     print(f"Checking {BEGET_URL}")
+    session = requests.Session()
+    session.headers.update(HEADERS)
+    # Beget gates the page behind a JS-set cookie; set it upfront to skip the stub.
+    session.cookies.set("beget", "begetok", domain="beget.com")
     try:
-        html_resp = requests.get(BEGET_URL, timeout=30, headers=HEADERS)
+        html_resp = session.get(BEGET_URL, timeout=30)
         html_resp.raise_for_status()
     except requests.RequestException as e:
         print(f"Fetch error: {e}")
         sys.exit(1)
 
-    data = fetch_payload(html_resp.text)
+    data = fetch_payload(session, html_resp.text)
     if data is None:
         print("ERROR: payload not loaded")
         sys.exit(1)
